@@ -27,15 +27,12 @@ class LEDDriver:
         pwm = pow (2, (self.led*(1000/100) / self.r)) - 1 # Make the LED output linear
         self.pi.set_PWM_dutycycle(self.ledPin, (self.pwmRange-pwm)) # invert the PWM output for the attic
             
-# this doesn't work, it wasn't updated from the original copy of this file
 def pulse(duration):
     """Pulse output for the duration, in seconds"""
-    for i,active in enumerate(ledsActive):
-        leds.ledRing[i] = active*100
+    leds.led = 100
     leds.update()
     time.sleep(duration)
-    for i,active in enumerate(ledsActive):
-        leds.ledRing[i] = 0
+    leds.led = 0
     leds.update()
 
 def strobe(leds, frequency, dutyCycle):
