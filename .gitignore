@@ -1,4 +1,7 @@
-#Itnore Mac backup types of files
+# python compiled files
+.pyc
+
+#Ignore Mac backup types of files
 
 # General
 .DS_Store
