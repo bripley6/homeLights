@@ -26,7 +26,7 @@ class LEDDriver:
     def update(self):
         """Update the state of the output pins to match the LED object"""
         pwm = pow (2, (self.led*(1000/100) / self.r)) - 1 # Make the LED output linear
-        self.pi.set_PWM_dutycycle(self.ledPin, (pwm)) # (self.pwmRange-pwm) invert the PWM output for the attic
+        self.pi.set_PWM_dutycycle(self.ledPin, (self.pwmRange-pwm)) # (self.pwmRange-pwm) invert the PWM output for the attic
             
     def pulse(self, duration):
         """Pulse output for the duration, in seconds"""

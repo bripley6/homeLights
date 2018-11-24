@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=.8, maximum-scale=1.0, user-scalable=no" />
+    <title>Manual light control</title>
+	<style>
+	    body {
+	      background-color: powderblue;
+		  padding: 20px 20px;
+
+	    }
+		.button {
+		    font-size: 20px;
+			padding: 8px 10px;
+			margin: 4px 2px;
+		}
+		.slider {
+		    -webkit-appearance: none;
+		    width: 300px;
+		    height: 15px;
+		    border-radius: 5px;   
+		    background: #d3d3d3;
+		    outline: none;
+		    opacity: 0.7;
+		    -webkit-transition: .2s;
+		    transition: opacity .2s;
+		}
+
+		.slider::-webkit-slider-thumb {
+		    -webkit-appearance: none;
+		    appearance: none;
+		    width: 25px;
+		    height: 25px;
+		    border-radius: 50%; 
+		    background: #4CAF50;
+		    cursor: pointer;
+		}
+
+		.slider::-moz-range-thumb {
+		    width: 25px;
+		    height: 25px;
+		    border-radius: 50%;
+		    background: #4CAF50;
+		    cursor: pointer;
+		}
+	</style>
+
+</head>
+<body>
+    <h1>Manual light control<br><i>the geeky way</i></h1>
+	<form id='buttonForm'></form>
+    {% for item in buttons %}	
+		 <button type='submit' 
+			form='buttonForm' 
+			formaction='{{ relPath }}switches/{{ item.path }}'
+			formmethod='post'
+			name='switch'
+			value='{{ item.switch }}'
+			class='button'>
+			{{ item.text }}
+		</button><br/>
+    {% endfor %}
+	<br>
+<a href='../../'>Return</a>
+<div class="slidecontainer">
+  This does nothing... :-)<br>
+  <input type="range" min="1" max="100" value="50" class="slider" id="brightness"><br>
+  <span id="demo" style="font-weight:bold">50</span>
+</div>
+	<script>
+
+		var slider = document.getElementById("brightness");
+		var output = document.getElementById("demo");
+		output.innerHTML = slider.value; // Display the default slider value
+
+		// Update the current slider value (each time you drag the slider handle)
+		slider.oninput = function() {
+		    output.innerHTML = this.value;
+			
+			/*var xhr = new XMLHttpRequest();
+			xhr.open("POST", '/server', true);
+			see this: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/send
+			*/
+			
+		}
+	</script>
+
+</body>
+</html>

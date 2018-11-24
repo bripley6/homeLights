@@ -1,31 +1,48 @@
-import atticUtility as attic
-     
+import atticUtility     
 from flask import Flask
 from flask import request
+from flask import render_template
+
+# set these up for your host
+hostIP = "10.1.10.6"
+hostPort = 8000
+debug = True
+ 
+# create some objects
 app = Flask(__name__)
+attic = atticUtility.LEDDriver()
 
-# create the LED output object for controlling attic light
-leds = attic.LEDDriver()
-
-# define some alternate names for the lights
+# define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
 atticPartyNames = ['party', 'attic party']
-livingroomNames = ['living room', 'living']
+livingroomNames = ['living room', 'living', 'living room medium']
 livingroomBrightNames = ['living room bright', 'living room full', 'living room max']
-livingroomTVNames = ['living room tv', 'living room dim', 'living tv']
+livingroomTVNames = ['living room tv', 'living room dim', 'living tv', 'living room low']
 
+ 
+class button():
+    """A class for defining a button element to go into the manual webpage"""
+    def __init__(o, path, switch, text):
+      o.path = path
+      o.switch = switch
+      o.text = text
 
+buttons = []  
+buttons.append(button('on', 'attic',  'Attic lights - ON '))
+buttons.append(button('on', 'party',  'Attic party - ON  '))
+buttons.append(button('off', 'attic', 'Attic lights - OFF'))
+buttons.append(button('on', 'living room full', 'Living room lights - FULL'))
+buttons.append(button('on', 'living room', 'Living room lights - MED '))
+buttons.append(button('on', 'living room tv', 'Living room lights - LOW'))
+buttons.append(button('off', 'living room', 'Living room lights - OFF   '))
+
+ 
 @app.route("/")
 def default():
-    return "<html><form action='switches/on' method='post'>\
-    <input type='hidden' name='switch' value='attic'>\
-  <input type='submit' value='Attic lights on'></form></html>"
+    return render_template('manualControl.html', buttons=buttons)
+     
   
-    garbage = "<html>This little app will control some lights.<br>\
-    <a href='switches/atticOn'>Attic Lights On</a></html>\
-    <a href='switches/atticOff'>Attic Lights Off</a></html>"    
-  
-"""The app should pass an argument via get method like http://198.27.188.7:8000/switches/sw0\
+"""The app should pass an argument via post method like http://198.27.188.7:8000/switches/on\
 This app uses pigpiod for controlling I/O. Start the demon from a console with 'sudo pigpiod'"""
 @app.route('/switches/<onOff>', methods=['POST', 'GET'])
 def updateSwitch(onOff):
@@ -38,18 +55,18 @@ def updateSwitch(onOff):
     
     if switch in atticNames:
         if onOff == "on":
-            attic.fadeOn(leds, 5)
+            attic.fadeOn(5)
         elif onOff == "off":
-            attic.fadeOff(leds, 5)
+            attic.fadeOff(5)
 
-    if switch in atticPartyNames:
+    elif switch in atticPartyNames:
         if onOff == "on":
-          attic.strobe(leds, 5, .2)      
+          attic.strobe(5, .2)      
     else:
-        return "I don't know this switch <i>" + switch + "</i>."
+        return "I don't know this switch <i>" + switch + "</i>. <a href='../../'> Go back</a>"
         
-    return "ok"
+    return render_template('manualControl.html', buttons=buttons, relPath='../../')
         
     
 if __name__ == "__main__":
-    app.run(host='10.1.10.6', port=int("8000"), debug=True)
+    app.run(host=hostIP, port=int(hostPort), debug=debug)
