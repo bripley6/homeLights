@@ -33,7 +33,7 @@ while (1): # loop this forever
         leds.update()
         time.sleep(delay)
 
-    print "Leaving the LEDs on"
+    print "Leaving the LEDs on and exiting"
     leds.led = 100
     leds.update()
 

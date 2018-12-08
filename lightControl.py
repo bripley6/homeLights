@@ -2,6 +2,7 @@ import atticUtility
 from flask import Flask
 from flask import request
 from flask import render_template
+import wirelessLightsUtility as living 
 
 # set these up for your host
 hostIP = "10.1.10.6"
@@ -15,9 +16,9 @@ attic = atticUtility.LEDDriver()
 # define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
 atticPartyNames = ['party', 'attic party']
-livingroomNames = ['living room', 'living', 'living room medium']
-livingroomBrightNames = ['living room bright', 'living room full', 'living room max']
-livingroomTVNames = ['living room tv', 'living room dim', 'living tv', 'living room low']
+livingRoomNames = ['living room', 'living', 'living room medium']
+livingRoomBrightNames = ['living room bright', 'living room full', 'living room max']
+livingRoomDimNames = ['living room tv', 'living room dim', 'living tv', 'living room low']
 
  
 class button():
@@ -61,12 +62,40 @@ def updateSwitch(onOff):
 
     elif switch in atticPartyNames:
         if onOff == "on":
-          attic.strobe(5, .2)      
+          attic.strobe(5, .2)
+ 
+    elif switch in livingRoomBrightNames:
+        if onOff == "on":
+            living.pressButton(3)
+                
+    elif switch in livingRoomNames:
+        if onOff == "on":
+            living.pressButton(2)
+          
+    elif switch in livingRoomDimNames:
+        if onOff == "on":
+            living.pressButton(1)          
+          
+    elif switch in livingRoomNames:
+        if onOff == "off":
+            living.pressButton(0)
+            
     else:
         return "I don't know this switch <i>" + switch + "</i>. <a href='../../'> Go back</a>"
         
     return render_template('manualControl.html', buttons=buttons, relPath='../../')
-        
+
+
+@app.route('/ajax/dim', methods=['POST'])
+def dimSwitch():
+    if (request.method == 'POST'):
+        switch = request.values['switch']
+        brightness = request.values['brightness']
+    
+    attic.led = int(brightness)
+    attic.update()
+    print "turning on "+ switch + " at " + brightness + " level"
+    return "ok"
     
 if __name__ == "__main__":
     app.run(host=hostIP, port=int(hostPort), debug=debug)

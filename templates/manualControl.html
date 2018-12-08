@@ -61,9 +61,9 @@
 		</button><br/>
     {% endfor %}
 	<br>
-<a href='../../'>Return</a>
+<a href='../../'>Return</a><br>
 <div class="slidecontainer">
-  This does nothing... :-)<br>
+  Attic dimmer<br>
   <input type="range" min="1" max="100" value="50" class="slider" id="brightness"><br>
   <span id="demo" style="font-weight:bold">50</span>
 </div>
@@ -77,10 +77,13 @@
 		slider.oninput = function() {
 		    output.innerHTML = this.value;
 			
-			/*var xhr = new XMLHttpRequest();
-			xhr.open("POST", '/server', true);
-			see this: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/send
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", '/ajax/dim', true);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.send("switch=attic&brightness=" + this.value); 
+			/*see this: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/send
 			*/
+
 			
 		}
 	</script>
