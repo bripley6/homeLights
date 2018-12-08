@@ -12,6 +12,7 @@ debug = True
 # create some objects
 app = Flask(__name__)
 attic = atticUtility.LEDDriver()
+living.initializeButtons()
 
 # define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
