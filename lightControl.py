@@ -5,7 +5,7 @@ from flask import render_template
 import wirelessLightsUtility as living 
 
 # set these up for your host
-hostIP = "10.1.10.6"
+hostIP = "10.1.10.5"
 hostPort = 8000
 debug = True
  
@@ -17,9 +17,9 @@ living.initializeButtons()
 # define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
 atticPartyNames = ['party', 'attic party']
-livingRoomNames = ['living room', 'living', 'living room medium']
+livingRoomNames = ['living room', 'the living room', 'living', 'living room medium']
 livingRoomBrightNames = ['living room bright', 'living room full', 'living room max']
-livingRoomDimNames = ['living room tv', 'living room dim', 'living tv', 'living room low']
+livingRoomDimNames = ['living room TV', 'living room dim', 'living TV', 'living room low', 'dim living room']
 
  
 class button():
@@ -53,7 +53,7 @@ def updateSwitch(onOff):
     
     if (request.method == 'POST'):
         switch = request.values['switch']
-        print "requesting to switch " + onOff + " " + switch + " lights."
+        print ("requesting to switch " + onOff + " " + switch + " lights.")
     
     if switch in atticNames:
         if onOff == "on":
@@ -72,14 +72,12 @@ def updateSwitch(onOff):
     elif switch in livingRoomNames:
         if onOff == "on":
             living.pressButton(2)
+        else:
+            living.pressButton(0)
           
     elif switch in livingRoomDimNames:
         if onOff == "on":
             living.pressButton(1)          
-          
-    elif switch in livingRoomNames:
-        if onOff == "off":
-            living.pressButton(0)
             
     else:
         return "I don't know this switch <i>" + switch + "</i>. <a href='../../'> Go back</a>"
@@ -95,7 +93,7 @@ def dimSwitch():
     
     attic.led = int(brightness)
     attic.update()
-    print "turning on "+ switch + " at " + brightness + " level"
+    print ("turning on "+ switch + " at " + brightness + " level")
     return "ok"
     
 if __name__ == "__main__":
