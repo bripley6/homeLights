@@ -1,3 +1,5 @@
+# copy this file to /etc/systemd/system/homeLights.service (try coping via link with -l option)
+# enable on system boot with sudo systemctl enable homeLights.service 
 [Unit]
 Description=Google Assistant light control for Lutron wireless remote and direct attic light control
 After=network.target

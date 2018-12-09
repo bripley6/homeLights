@@ -82,7 +82,7 @@ def updateSwitch(onOff):
             living.pressButton(1)          
             
     else:
-        logging.warning("Unknown switch" + switch)
+        logging.warning("Unknown switch " + switch)
         return "I don't know this switch <i>" + switch + "</i>. <a href='../../'> Go back</a>"
         
     return render_template('manualControl.html', buttons=buttons, relPath='../../')
