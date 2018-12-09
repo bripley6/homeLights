@@ -8,13 +8,13 @@ import logging
 # set these up for your host
 hostIP = "10.1.10.5"
 hostPort = 8000
-debug = True
+debug = False
  
 # create some objects
 app = Flask(__name__)
 attic = atticUtility.LEDDriver()
 living.initializeButtons()
-logging.basicConfig(filename='lightControl.log', level=logging.INFO) #filename='myapp.log', 
+logging.basicConfig(filename='light.log', level=logging.INFO) #filename='myapp.log', 
 
 # define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
