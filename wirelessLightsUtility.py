@@ -1,6 +1,7 @@
 """functions for momentary button presses for activiating Lutron 4-scene wirless remote"""
 import time
 import pigpio
+import logging
      
 
 pi = pigpio.pi()
@@ -19,7 +20,7 @@ def initializeButtons():
 def pressButton(button):
     """Momentarily "presses" a button to activate it. Leave it in input mode to not drive over 3.3v"""
     if (button >= len(buttonPins) or button < 0):
-        print ("Button " + str(button) + " is not a valid button.")
+        logging.warning("Button " + str(button) + " is not a valid button.")
         return -1
     
     if (button == 1):
@@ -45,6 +46,6 @@ if __name__ == "__main__":
     initializeButtons()
     
     for button in [1, 2, 3, 0]:
-        print ("Pressing button " + str(button))
+        logging.info("Pressing button " + str(button))
         pressButton(button)
         time.sleep(3)

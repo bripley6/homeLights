@@ -3,6 +3,7 @@ from flask import Flask
 from flask import request
 from flask import render_template
 import wirelessLightsUtility as living 
+import logging
 
 # set these up for your host
 hostIP = "10.1.10.5"
@@ -13,6 +14,7 @@ debug = True
 app = Flask(__name__)
 attic = atticUtility.LEDDriver()
 living.initializeButtons()
+logging.basicConfig(filename='lightControl.log', level=logging.INFO) #filename='myapp.log', 
 
 # define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
@@ -53,7 +55,7 @@ def updateSwitch(onOff):
     
     if (request.method == 'POST'):
         switch = request.values['switch']
-        print ("requesting to switch " + onOff + " " + switch + " lights.")
+        logging.info("requesting to switch " + onOff + " " + switch + " lights.")
     
     if switch in atticNames:
         if onOff == "on":
@@ -80,6 +82,7 @@ def updateSwitch(onOff):
             living.pressButton(1)          
             
     else:
+        logging.warning("Unknown switch" + switch)
         return "I don't know this switch <i>" + switch + "</i>. <a href='../../'> Go back</a>"
         
     return render_template('manualControl.html', buttons=buttons, relPath='../../')
@@ -93,7 +96,7 @@ def dimSwitch():
     
     attic.led = int(brightness)
     attic.update()
-    print ("turning on "+ switch + " at " + brightness + " level")
+    logging.info ("turning on "+ switch + " at " + brightness + " level")
     return "ok"
     
 if __name__ == "__main__":

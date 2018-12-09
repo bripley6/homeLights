@@ -1,6 +1,9 @@
 # python compiled files
 .pyc
 
+# log files
+.log
+
 #Ignore Mac backup types of files
 
 # General
