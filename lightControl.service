@@ -3,7 +3,7 @@ Description=Google Assistant light control for Lutron wireless remote and direct
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 -u lightControl.py
+ExecStart=/home/pi/code/homeLights/lights
 WorkingDirectory=/home/pi/code/homeLights
 StandardOutput=inherit
 StandardError=inherit

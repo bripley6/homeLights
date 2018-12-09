@@ -6,3 +6,9 @@ INFO:werkzeug: * Running on http://10.1.10.5:8000/ (Press CTRL+C to quit)
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 788-931-192
+INFO:werkzeug: * Running on http://10.1.10.5:8000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 788-931-192
+INFO:root:requesting to switch on the living room lights.
+INFO:werkzeug:18.212.77.165 - - [09/Dec/2018 08:07:56] "POST /switches/on?switch=the%20living%20room HTTP/1.1" 200 -
