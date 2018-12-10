@@ -4,6 +4,7 @@ from flask import request
 from flask import render_template
 import wirelessLightsUtility as living 
 import logging
+import re
 
 # set these up for your host
 hostIP = "10.1.10.5"
@@ -14,14 +15,25 @@ debug = False
 app = Flask(__name__)
 attic = atticUtility.LEDDriver()
 living.initializeButtons()
-logging.basicConfig(filename='light.log', level=logging.INFO) #filename='myapp.log', 
 
+# in debug, log to the console instead of log file
+if (debug == True):
+    logging.basicConfig(level=logging.INFO)
+else:
+    logging.basicConfig(filename='light.log', level=logging.INFO)
+
+
+"""some example phrases would be
+hey Google, turn on the living room lights
+hey Google, turn the living room lights on
+ * or s/turn/switch 
+"""
 # define some alternate names that Google Assistant might respond with for the lights
 atticNames = ['attic','kid hole', 'the attic', 'kid hall', 'kid Hall']
 atticPartyNames = ['party', 'attic party']
-livingRoomNames = ['living room', 'the living room', 'living', 'living room medium']
+livingRoomNames = ['living room', 'living', 'living room medium']
 livingRoomBrightNames = ['living room bright', 'living room full', 'living room max']
-livingRoomDimNames = ['living room TV', 'living room dim', 'living TV', 'living room low', 'dim living room']
+livingRoomDimNames = ['living room TV', 'living room dim', 'living room low', 'dim living room']
 
  
 class button():
@@ -37,7 +49,7 @@ buttons.append(button('on', 'party',  'Attic party - ON  '))
 buttons.append(button('off', 'attic', 'Attic lights - OFF'))
 buttons.append(button('on', 'living room full', 'Living room lights - FULL'))
 buttons.append(button('on', 'living room', 'Living room lights - MED '))
-buttons.append(button('on', 'living room tv', 'Living room lights - LOW'))
+buttons.append(button('on', 'living room dim', 'Living room lights - LOW'))
 buttons.append(button('off', 'living room', 'Living room lights - OFF   '))
 
  
@@ -55,6 +67,7 @@ def updateSwitch(onOff):
     
     if (request.method == 'POST'):
         switch = request.values['switch']
+        switch = re.sub(r'the\s', '', switch, flags=re.IGNORECASE) # remove 'the'
         logging.info("requesting to switch " + onOff + " " + switch + " lights.")
     
     if switch in atticNames:
